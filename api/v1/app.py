@@ -20,8 +20,6 @@ def not_found(error):
     """ 404 Error """
     return jsonify(error="Not found"), 404
 
-
-
 if __name__ == '__main__':
     """ Main """
     host = environ.get('HBNB_API_HOST')

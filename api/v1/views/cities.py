@@ -5,12 +5,14 @@ from sqlalchemy.sql.elements import Null
 from api.v1.views import app_views
 from flask import jsonify, abort
 from models import storage
-from models.state import State, City
+from models.state import State
+from models.city import City
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET'], strict_slashes=False)
-def cities(state_id):
-    """  Retrieves the list of all City objects of a State """
+@app_views.route('/states/<state_id>/cities', methods=['GET'],
+                 strict_slashes=False)
+def get_cities(state_id):
+    """ Retrieves the list of all City objects of a State """
     states_id = storage.get(State, state_id)
 
     if states_id == Null:
