@@ -8,8 +8,8 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states_id', methods=['GET'], strict_slashes=False)
-def states_id():
+@app_views.route('/states', methods=['GET'], strict_slashes=False)
+def states():
     """  endpoint that retrieves the list of all State objects """
     states = storage.all(State).values()
     new = []
