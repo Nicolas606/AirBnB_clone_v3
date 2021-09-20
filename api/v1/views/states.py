@@ -1,9 +1,8 @@
 #!/usr/bin/python3
 """ States """
 
-from sqlalchemy.sql.elements import Null
 from api.v1.views import app_views
-from flask import jsonify, abort
+from flask import jsonify, abort, request
 from models import storage
 from models.state import State
 
@@ -22,7 +21,7 @@ def states():
 def states_id(state_id):
     """  endpoint that Retrieves a state object according to its id """
     states_id = storage.get(State, state_id)
-    if states_id == Null:
+    if states_id is None:
         abort(404)
     return jsonify(states_id)
 
@@ -32,7 +31,7 @@ def delete_states(state_id):
     """ Deletes a State object """
     state_delete = storage.get(State, state_id)
 
-    if state_delete == Null:
+    if state_delete is None:
         abort(404)
 
     storage.delete(state_delete)
@@ -44,8 +43,34 @@ def delete_states(state_id):
 @app_views.route('/sates', methods=['POST'], strict_slashes=False)
 def create_state():
     """ Creates a State """
+    json = request.get_json()
+    if json is None:
+        abort(400, description="Not a JSON")
+    if 'name' not in json:
+        abort(400, description="Missing name")
+
+    state_object = State(**json)
+    state_object.save()
+
+    return jsonify(state_object.to_dict()), 201
 
 
 @app_views.route('/sates/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
-    """ Updates a State """
+    """ Updates a State onject"""
+    state_obj = storage.get(State, state_id)
+
+    if state_obj is None:
+        abort(404)
+
+    json = request.get_json()
+    if json is None:
+        abort(400, description="Not a JSON")
+
+    ignore = ['id', 'created_at', 'updated_at']
+
+    for key, value in json.items():
+        if key not in ignore:
+            setattr(state_obj, key, value)
+    storage.save()
+    return jsonify(state_obj.to_dict()), 200
