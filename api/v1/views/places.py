@@ -17,11 +17,11 @@ def places(city_id):
     if all_places == Null:
         abort(404)
 
-    list_cities = []
+    list_places = []
     for place in all_places.places:
-        list_cities.append(place.to_dict())
+        list_places.append(place.to_dict())
 
-    return jsonify(list_cities)
+    return jsonify(list_places)
 
 
 @app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
