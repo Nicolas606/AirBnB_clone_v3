@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""  """
+""" App """
 from os import environ
 from flask import Flask, jsonify
 from models import storage
@@ -10,7 +10,7 @@ app.register_blueprint(app_views)
 
 
 @app.teardown_appcontext
-def close():
+def close(self):
     """ call store.close """
     storage.close()
 
@@ -18,7 +18,7 @@ def close():
 @app.errorhandler(404)
 def not_found(error):
     """ 404 Error """
-    return jsonify({'error': "Not found"}), 404
+    return jsonify(error="Not found"), 404
 
 
 
