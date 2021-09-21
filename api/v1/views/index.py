@@ -28,4 +28,3 @@ def stats():
         new_dict[name[i]] = storage.count(classes[i])
 
     return jsonify(new_dict)
-
