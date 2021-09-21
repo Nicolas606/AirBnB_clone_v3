@@ -68,6 +68,7 @@ def create_cities(state_id):
     city_object.save()
     return jsonify(city_object.to_dict()), 201
 
+
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def update_cities(city_id):
     """ Updates a City object """
