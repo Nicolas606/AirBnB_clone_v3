@@ -17,7 +17,7 @@ def get_cities(state_id):
         abort(404)
     list_city = []
     all_cities = storage.all(City)
-    for city in all_cities:
+    for city in all_cities.values():
         if city.state_id == state_id:
             list_city.append(city.to_dict())
 
@@ -27,12 +27,12 @@ def get_cities(state_id):
 @app_views.route('/cities/<city_id>', methods=['GET'], strict_slashes=False)
 def get_citie(city_id):
     """ Retrieves a City object. """
-    all_cities = storage.get(City, city_id)
+    one_cities = storage.get(City, city_id)
 
-    if all_cities is None:
+    if one_cities is None:
         abort(404)
 
-    return jsonify(all_cities)
+    return jsonify(one_cities.to_dict())
 
 
 @app_views.route('/cities/<city_id>', methods=['DELETE'], strict_slashes=False)
@@ -78,7 +78,7 @@ def update_cities(city_id):
     json = request.get_json()
     if json is None:
         abort(400, description="Not a JSON")
-    for key, value in json.item():
+    for key, value in json.items():
         if key not in ['id', 'state_id', 'created_at', 'updated_at']:
             setattr(cities_id, key, value)
     storage.save()
